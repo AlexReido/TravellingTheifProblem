@@ -15,7 +15,7 @@ class Problem(object):
         cwd = os.getcwd()
         print("cwd: " + cwd)
         newPath = Path(cwd).parent.parent
-        newPath = os.path.join(newPath,"gecco19-thief-master", "src", "main", "resources", (fileName+".txt"))
+        newPath = os.path.join(newPath,"TravellingThief", "src", "main", "resources", (fileName+".txt"))
         print(newPath)
         file = open(newPath,"r")
         line = file.readline()
