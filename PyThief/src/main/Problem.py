@@ -3,7 +3,6 @@ Created on Nov 27, 2020
 
 @author: areid
 '''
-from astropy.wcs.docstrings import name
 import sys
 import os
 from pathlib import Path
@@ -13,10 +12,10 @@ class Problem(object):
     '''
     def readProblem(self, fileName):
         cwd = os.getcwd()
-        print("cwd: " + cwd)
-        newPath = Path(cwd).parent.parent
+#         print("cwd: " + cwd)
+        newPath = Path(cwd).parent.parent.parent
         newPath = os.path.join(newPath,"TravellingThief", "src", "main", "resources", (fileName+".txt"))
-        print(newPath)
+#         print(newPath)
         file = open(newPath,"r")
         line = file.readline()
         while (line):    
@@ -65,7 +64,7 @@ class Problem(object):
         '''
         Constructor
         '''
-        self.name = name
+        self.name = ""
         self.numOfCities = -1
         self.numOfItems = -1;
 
@@ -96,11 +95,11 @@ class Problem(object):
         
 
 
-p = Problem()
-p.readProblem("a280-n279")
-
-print("number of items: ", p.numOfItems)
-print("coordinates: ", p.coordinates)
+# p = Problem()
+# p.readProblem("a280-n279")
+# 
+# print("number of items: ", p.numOfItems)
+# print("coordinates: ", p.coordinates)
 
 """
      /**

@@ -3,9 +3,9 @@ Created on Dec 1, 2020
 
 @author: areid
 '''
-from TravellingThief.getProblem import Problem
+from main.Problem import Problem
 
-
+# Problem
 p = Problem()
 p.readProblem("a280-n279")
 
