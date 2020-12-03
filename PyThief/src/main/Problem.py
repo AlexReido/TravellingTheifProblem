@@ -102,7 +102,9 @@ class Problem(object):
 
             time += distance / speed;
         
-        s = Solution(z, pi, profit, time)
+        singleObjective = profit - (self.R * time);
+        objectives = [time, -profit]
+        s = Solution(z, pi, profit, time, singleObjective, objectives)
         return s
 #         self.pi = pi
 #         self.z = z
