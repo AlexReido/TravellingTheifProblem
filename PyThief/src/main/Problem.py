@@ -5,7 +5,9 @@ Created on Nov 27, 2020
 '''
 import sys
 import os
+from collections import deque
 from pathlib import Path
+import math
 class Problem(object):
     '''
     classdocs
@@ -57,9 +59,55 @@ class Problem(object):
         
 
             line = file.readline()
+        self.itemsAtCity = []
+        for i in range(self.numOfCities):
+            self.itemsAtCity.append(deque())
+        for i in range(len(self.cityOfItem)):
+            self.itemsAtCity.get(self.cityOfItem[i]).add(i);
+    
+        
+    
         
         
+    def evaluate(self, pi, z):
+        if (len(pi) != self.numOfCities or len(z) != self.numOfItems):
+            raise RuntimeError("Wrong input for traveling thief evaluation!")
+        elif (pi[0] != 0):
+            raise RuntimeError("Thief must start at city 0")
+        
+        time = 0
+        profit = 0
+        weight = 0
+        
+        for i in range(self.numOfCities):
+            city = z[i]
+            
+            for j in self.itemsAtCity.get(city):
+                if j in z :
+                    weight += self.weight[j]
+                    profit += self.profit[j]
+                    
+            if (weight> self.maxWeight):
+                time = sys.float_info.max
+                profit = -sys.float_info.max
+                break
+            
+            speed = self.maxSpeed - ((weight / self.maxWeight) * (self.maxSpeed - self.minSpeed))
+            
+            # increase time by considering the speed - do not forget the way from the last city to the first!
+            nextCity = pi[((i + 1) % self.numOfCities)]
+            distance = math.ceil(self.euclideanDistance(self, city, nextCity))
 
+            time += distance / speed;
+        
+        self.pi = pi
+        self.z = z
+        
+    def euclideanDistance(self, cityA, cityB):
+        xdist = self.coordinates[cityA][0] - self.coordinates[cityB][0]
+        ydist = self.coordinates[cityA][1] - self.coordinates[cityB][1]
+        return math.sqrt((xdist ** 2) + (ydist ** 2))
+    
     def __init__(self):
         '''
         Constructor
@@ -93,13 +141,6 @@ class Problem(object):
         self.profit = [] #double[] 
         
         
-
-
-# p = Problem()
-# p.readProblem("a280-n279")
-# 
-# print("number of items: ", p.numOfItems)
-# print("coordinates: ", p.coordinates)
 
 """
      /**
