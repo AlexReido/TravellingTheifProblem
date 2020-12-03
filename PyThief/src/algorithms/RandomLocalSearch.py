@@ -5,6 +5,11 @@ Created on Dec 1, 2020
 '''
 from algorithms.Algorithm import Algorithm
 import random
+from main.Solution import Solution
+from main.Problem import Problem
+from sympy.core.evalf import rnd
+from astropy.units import count
+
 
 class RandomLocalSearch(Algorithm):
     '''
@@ -12,7 +17,8 @@ class RandomLocalSearch(Algorithm):
     '''
     def solve(self, Problem):
         counter = 0
-        nds = 0 # non-dominated set
+        # TODO implement non dominated set Class
+        nds = [] # non-dominated set
         
         while True:
             if (self.pi == None):
@@ -23,9 +29,37 @@ class RandomLocalSearch(Algorithm):
                 
             z = [False]*Problem.numOfCities #Packing plan
             
+            s = Problem.evaluate(Problem, pi, z)
             
+            # TODO change to nds class function
+            nds.append(s)
+            counter += 1
             
-        return n
+            rnd = random.choices(range(1, Problem.numOfCities), Problem.numOfCities)
+            assert Problem.numOfCities == len(rnd)
+            weight = 0.0
+            for j in range(len(rnd)):
+                item = rnd[j]
+                
+                if ((weight + Problem.weight[item]) < Problem.maxWeight ):
+                    z[item] = True
+                    weight += Problem.weight[item]
+                    
+                    s = Problem.evaluate(Problem, pi, z)
+                    # TODO change to nds class function 
+                    nds.append(s)
+                    counter += 1
+                    
+                    
+                if (counter >= Problem.maxNumOfTrials): 
+                    break
+
+    
+
+            if (counter >= Problem.maxNumOfTrials):
+                break
+
+        return nds;
 
 
         

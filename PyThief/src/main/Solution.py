@@ -10,24 +10,33 @@ class Solution(object):
     '''
     # TODO implement getrelation for non-dominated sorting
     # TODO implement if two solutions are equal in design space (same tour and packing plan)
-
-
-    def __init__(self):
-        '''
-        Constructor
-        '''
-        # tour of thief
-        self.pi = []
-        # packing plan list of boolean
-        self.z = []
-        # Time taken on tour
-        self.time = -1.0
-        #profit made from tour
-        self.profit = -1.0
+    def __init__(self, z, pi, profit, time, singleObjective, objectives):
+        self.z = z
+        self.pi = pi
+        self.profit = profit
+        self.time = time
+    
         # single objective 
-        self.singleObjective = -1.0
+        self.singleObjective = singleObjective
         # list of objectives (floats)
-        self.objectives = []
+        self.objectives = objectives
+
+#     def __init__(self):
+#         '''
+#         Constructor
+#         '''
+#         # tour of thief
+#         self.pi = []
+#         # packing plan list of boolean
+#         self.z = []
+#         # Time taken on tour
+#         self.time = -1.0
+#         #profit made from tour
+#         self.profit = -1.0
+#         # single objective 
+#         self.singleObjective = -1.0
+#         # list of objectives (floats)
+#         self.objectives = []
         
         
     

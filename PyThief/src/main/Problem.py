@@ -8,6 +8,8 @@ import os
 from collections import deque
 from pathlib import Path
 import math
+from main.Solution import Solution
+from cmath import pi
 class Problem(object):
     '''
     classdocs
@@ -100,8 +102,11 @@ class Problem(object):
 
             time += distance / speed;
         
-        self.pi = pi
-        self.z = z
+        s = Solution(z, pi, profit, time)
+        return s
+#         self.pi = pi
+#         self.z = z
+#       
         
     def euclideanDistance(self, cityA, cityB):
         xdist = self.coordinates[cityA][0] - self.coordinates[cityB][0]
