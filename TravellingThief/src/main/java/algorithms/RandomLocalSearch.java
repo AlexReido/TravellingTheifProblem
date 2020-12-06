@@ -63,6 +63,7 @@ public class RandomLocalSearch implements Algorithm {
             // this is the order of items we will try to add to generated a new non-dominated point
             List<Integer> rnd = getIndex(0, problem.numOfItems);
             java.util.Collections.shuffle(rnd);
+            System.out.println(rnd.size());
 
             // no iteratively evaluate when an item is added and add to non-dominated set
             double weight = 0.0;

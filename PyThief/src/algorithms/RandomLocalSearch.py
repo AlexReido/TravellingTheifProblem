@@ -15,48 +15,52 @@ class RandomLocalSearch(Algorithm):
     '''
     classdocs
     '''
-    def solve(self, Problem):
+    def solve(self, problem):
         counter = 0
         # TODO implement non dominated set Class
         nds = [] # non-dominated set
         
         while True:
             if (self.pi == None):
-                pi = random.choices(range(1, Problem.numOfCities), Problem.numOfCities)
+                pi = list(range(1, problem.numOfCities))
+#                 print(pi)
+                random.shuffle(pi)
+#                 print(pi)
                 pi.insert(0, 0)
             else:
                 pi = self.pi
                 
-            z = [False]*Problem.numOfCities #Packing plan
+            z = [False]*problem.numOfItems #Packing plan
             
-            s = Problem.evaluate(Problem, pi, z)
+            s = problem.evaluate(pi, z)
             
             # TODO change to nds class function
             nds.append(s)
             counter += 1
-            
-            rnd = random.choices(range(1, Problem.numOfCities), Problem.numOfCities)
-            assert Problem.numOfCities == len(rnd)
+            rnd = list(range(1, problem.numOfCities-1))
+            random.shuffle(rnd)
+#             print(len(rnd))
+#             assert problem.numOfCities == len(rnd)
             weight = 0.0
             for j in range(len(rnd)):
                 item = rnd[j]
-                
-                if ((weight + Problem.weight[item]) < Problem.maxWeight ):
+#                 print("item ", item)
+                if ((weight + problem.weight[item]) < problem.maxWeight ):
                     z[item] = True
-                    weight += Problem.weight[item]
+                    weight += problem.weight[item]
                     
-                    s = Problem.evaluate(Problem, pi, z)
+                    s = problem.evaluate(pi, z)
                     # TODO change to nds class function 
                     nds.append(s)
                     counter += 1
                     
-                    
-                if (counter >= Problem.maxNumOfTrials): 
+                    #TODO add parameter to limit number of trials
+                if (counter >= 20): 
                     break
 
     
 
-            if (counter >= Problem.maxNumOfTrials):
+            if (counter >= 20):#problem.maxNumOfTrials
                 break
 
         return nds;

@@ -7,7 +7,7 @@ from main.Problem import Problem
 
 
 class Algorithm(object):
-    def solve(self, Problem):
-#         problem = Problem()
-#         print("Sovlving problem "+ str(Problem.numOfCities))
+    def solve(self, problem):
+#         problem = problem()
+#         print("Sovlving problem "+ str(problem.numOfCities))
         raise NotImplementedError("should be in derived class")

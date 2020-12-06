@@ -57,7 +57,7 @@ class Problem(object):
                     a = line.split()
                     self.profit.append(float(a[1].strip()))
                     self.weight.append(float(a[2].strip()))
-                    self.cityOfItem.append(float(a[3].strip()) - 1)
+                    self.cityOfItem.append(int(a[3].strip()) - 1)
         
 
             line = file.readline()
@@ -65,14 +65,18 @@ class Problem(object):
         for i in range(self.numOfCities):
             self.itemsAtCity.append(deque())
         for i in range(len(self.cityOfItem)):
-            self.itemsAtCity.get(self.cityOfItem[i]).add(i);
+            self.itemsAtCity[self.cityOfItem[i]].append(i);
     
-        
+#         print("len of weights: ", len(self.weight))
     
         
         
     def evaluate(self, pi, z):
         if (len(pi) != self.numOfCities or len(z) != self.numOfItems):
+#             print(len(pi))
+#             print(self.numOfCities)
+#             print(len(z))
+#             print(self.numOfItems)
             raise RuntimeError("Wrong input for traveling thief evaluation!")
         elif (pi[0] != 0):
             raise RuntimeError("Thief must start at city 0")
@@ -82,9 +86,9 @@ class Problem(object):
         weight = 0
         
         for i in range(self.numOfCities):
-            city = z[i]
+            city = pi[i]
             
-            for j in self.itemsAtCity.get(city):
+            for j in self.itemsAtCity[city]:
                 if j in z :
                     weight += self.weight[j]
                     profit += self.profit[j]
@@ -98,7 +102,7 @@ class Problem(object):
             
             # increase time by considering the speed - do not forget the way from the last city to the first!
             nextCity = pi[((i + 1) % self.numOfCities)]
-            distance = math.ceil(self.euclideanDistance(self, city, nextCity))
+            distance = math.ceil(self.euclideanDistance(city, nextCity))
 
             time += distance / speed;
         
