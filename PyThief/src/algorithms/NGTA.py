@@ -18,7 +18,18 @@ class NGTA(Algorithm):
         """Generate random population of length N
             Return list of tuple (z, pi)
         """ 
-        return True
+        pop = [] 
+        cities = [i for i in range(1,self.numOfCities+1)]
+        
+        for _ in range(n):
+            z = random.choice([0, 1], size=len(self.cityOfItem)) 
+            pi = cities.copy()
+            random.shuffle(pi)
+            
+            individual = (z, pi)      
+            pop.append(individual)
+                                    
+        return pop
     
     # Alex 
     def selectTour(self, pop):
