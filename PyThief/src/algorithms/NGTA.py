@@ -10,19 +10,20 @@ from main.Problem import Problem
 from sympy.core.evalf import rnd
 from astropy.units import count
 
+
 class NGTA(Algorithm):
     
     
     # Martyna 
-    def generateInitialPopulation(self, n):
+    def generateInitialPopulation(self, n, problem):
         """Generate random population of length N
             Return list of tuple (z, pi)
         """ 
         pop = [] 
-        cities = [i for i in range(1,self.numOfCities+1)]
+        cities = [i for i in range(1,problem.numOfCities+1)]
         
         for _ in range(n):
-            z = random.choice([0, 1], size=len(self.cityOfItem)) 
+            z = random.choice([0, 1], size=len(problem.numOfCities)) 
             pi = cities.copy()
             random.shuffle(pi)
             
@@ -31,7 +32,7 @@ class NGTA(Algorithm):
                                     
         return pop
     
-    # Alex 
+    # Alex
     def selectTour(self, pop):
         """Tournament selection first given number (6) of individuals randomly drawn from population,
             They are compared to according to thier rank, lowest rank selected, in case of draw 
@@ -39,19 +40,27 @@ class NGTA(Algorithm):
             Return  
         """
         n = 6
-        initial = []
-        for i in range(n):
-            solution = sellectrandom(pop)
-            initial.append(solution) 
+        initial = random.sample(pop, n)
         ranking = [1] * n
         
-        for i in range(n):
-            for j in range(n):# 1 if dominates
+        for i in range(n-1):
+            for j in range(i+1, n):# 1 if dominates
+                print("comparing i" + i + "and j " + j)
+                # if i dominates j 
                 if (initial[i].getrelation(initial[j]) == 1):
+                    ranking[j] += 1
+                # if j dominates i 
+                elif(initial[i].getrelation(initial[j]) == -1):
                     ranking[i] += 1
-                
-                    
-          
+        
+        min = 20            
+        for i, rank in enumerate(ranking):
+            if (rank < min):
+                min = rank 
+                index = i
+        return initial[index]
+    
+    
     # Alex 
     def crossover(self):
         """ Use the edge operator on the TSP route
@@ -107,7 +116,7 @@ class NGTA(Algorithm):
         # TODO implement non dominated set Class
         nds = [] # non-dominated first rank 
         
-        pCurrent = self.generateInitialPopulation(popSize)
+        pCurrent = self.generateInitialPopulation(popSize, problem)
         # returns list of tuple (z, pi)
         self.evaluate(pCurrent)
         self.updateArchive(pCurrent)
