@@ -9,6 +9,7 @@ from main.Solution import Solution
 from main.Problem import Problem
 from sympy.core.evalf import rnd
 from astropy.units import count
+from _collections import defaultdict
 
 
 class NGTA(Algorithm):
@@ -62,16 +63,63 @@ class NGTA(Algorithm):
     
     
     # Alex 
-    def crossover(self):
+    def crossover(self, parentA, parentB):
         """ Use the edge operator on the TSP route
             use uniform crossover on the packing plan - each item is selected randomly from parent """
         # edge operator 
-         
-        return True
-    
+        
+        tourA = parentA[1]
+        tourB = parentB[1]
+        cityLen = len(tourA)
+        edgeMap = defaultdict(list)
+        for c in range(cityLen):
+            edgeMap.setdefault(c, [])
+        edgeMap[tourA[0]].append(tourA[-1])
+        edgeMap[tourB[0]].append(tourB[-1])
+        edgeMap[tourA[-1]].append(tourA[0])
+        edgeMap[tourB[-1]].append(tourB[0])
+        for i, c in enumerate(tourA[0:-2]):
+            edgeMap[c].append(tourA[i+1])
+            edgeMap[tourA[i+1]].append(c)
+        for i, c in enumerate(tourB[0:-2]):
+            edgeMap[c].append(tourB[i+1])
+            edgeMap[tourB[i+1]].append(c)
+            
+            
+        currentCity = random.randrange(cityLen)
+        newTour = [currentCity]
+        while(len(edgeMap.keys())>1):
+            
+            currentCityEdgelist  = edgeMap.pop(currentCity)
+            if (currentCityEdgelist == []):
+                next = random.choice(edgeMap.keys())
+            else:    
+            # Chooses the city with fewest edges from the current cities neighbours.
+            # TODO random on equal  
+                min = int.__ceil__()
+                for city in currentCityEdgelist:
+    #                 edgeMap[city].remove()
+                    if (len(edgeMap[city]) < min):
+                        min = len(edgeMap[city])
+                        next = city
+            currentCity = next
+            newTour.append(currentCity)
+            
+        newPackingPlan = []
+        packingPlanA = parentA[0]
+        packingPlanB = parentB[0] 
+        itemLen = len(packingPlanA)
+        for i in range(itemLen):
+            if(random.randrange(1) == 1):
+                newPackingPlan.append(packingPlanA[i])
+            else:
+                newPackingPlan.append(packingPlanB[i])
+                
+        
+        return (newPackingPlan, newTour)   
     # Yudong 
     def mutate(self, preSolution):
-        """  mutates a solution of tuple(z , p) 
+        """  mutates a solution of tuple(z , pi) 
         Swap mutation for TSP part two random cities swapped
         Bitflip for packing plan random item"""
         return True 
@@ -125,8 +173,11 @@ class NGTA(Algorithm):
         for i in range(generationLimit):
             nextPop = [] 
             while (len(nextPop) < len(pCurrent)):
-                parents = self.selecttour(pCurrent)
-                children = self.crossover(parents)
+                parentA = self.selecttour(pCurrent)
+                parentB = self.selecttour(pCurrent)
+                # TODO assert different 
+                assert parentA != parentB, "Parents equal!!"
+                children = self.crossover(parentA, parentB)
                 children = self.mutate(children)
                 while (children in nextPop): # remove clones 
                     children = self.mutate(children)
