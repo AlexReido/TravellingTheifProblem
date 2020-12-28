@@ -9,6 +9,8 @@ from main.Solution import Solution
 from main.Problem import Problem
 from sympy.core.evalf import rnd
 from astropy.units import count
+import pandas
+import random
 
 
 class NGTA(Algorithm):
@@ -70,11 +72,15 @@ class NGTA(Algorithm):
         return True
     
     # Yudong 
-    def mutate(self, preSolution):
+    def mutate(self, preSolution,chance_of_mutation):
         """  mutates a solution of tuple(z , p) 
         Swap mutation for TSP part two random cities swapped
         Bitflip for packing plan random item"""
-        return True 
+        preSolution.resent_index(drop=true,inplace=true)
+        for x in range (preSolution.__len__()):
+            if(random.random() < chance_of_mutation):
+                preSolution['solutions'][x].mutate()
+        return preSolution
 
     
     def evaluate(self, children):
