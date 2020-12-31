@@ -51,14 +51,15 @@ class Competition(object):
         
         for solution in solutions:
             modTour = [(c + 1) for c in solution.pi]
-            pi = "".join((str(c)+" ") for c in modTour)
+            pi = "".join((str(c)+" ") for c in modTour) + "\n"
             varFile.write(pi)
-            z = "".join((str(item)+" ") for item in solution.z)
+            z = map(lambda item: "1" if item else "0", solution.z)
+            z = "".join((item + " ") for item in list(z)) + "\n"
             varFile.write(z)
             varFile.write('\n')
             
             #write into objective file
-            objFile.write(("%.2f" % solution.time)+ " " +  ("%.2f" % solution.profit))
+            objFile.write(("%.16f" % solution.time)+ " " +  ("%.16f" % solution.profit)+"\n")
         varFile.close()
         objFile.close()
 # 

@@ -58,7 +58,7 @@ class RandomLocalSearch(Algorithm):
             s = problem.evaluate(pi, z)
             nds = super().add(s, nds)
 
-            if (counter >= 200):#problem.maxNumOfTrials
+            if (counter >= 500):#problem.maxNumOfTrials
                 break
 
         return nds;
