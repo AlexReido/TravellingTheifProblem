@@ -63,39 +63,39 @@ class Problem(object):
             line = file.readline()
         self.itemsAtCity = []
         for i in range(self.numOfCities):
-            self.itemsAtCity.append(deque())
+            self.itemsAtCity.append([])
         for i in range(len(self.cityOfItem)):
-            self.itemsAtCity[self.cityOfItem[i]].append(i);
-    
+            self.itemsAtCity[self.cityOfItem[i]].append(i)
+        
+#         print(self.cityOfItem)
+#         print(self.itemsAtCity)
+#         print(self.profit)
 #         print("len of weights: ", len(self.weight))
     
         
         
     def evaluate(self, pi, z):
         if (len(pi) != self.numOfCities or len(z) != self.numOfItems):
-#             print(len(pi))
-#             print(self.numOfCities)
-#             print(len(z))
-#             print(self.numOfItems)
             raise RuntimeError("Wrong input for traveling thief evaluation!")
         elif (pi[0] != 0):
             raise RuntimeError("Thief must start at city 0")
         
         time = 0
-        profit = 0
+        p = 0
         weight = 0
-        
+#         print(z)
         for i in range(self.numOfCities):
             city = pi[i]
             
             for j in self.itemsAtCity[city]:
-                if j in z :
-                    weight += self.weight[j]
-                    profit += self.profit[j]
+                if (z[j] == True) :
                     
+                    weight += self.weight[j]
+                    p += self.profit[j]
+#             print(p)
             if (weight> self.maxWeight):
                 time = sys.float_info.max
-                profit = -sys.float_info.max
+                p = -sys.float_info.max
                 break
             
             speed = self.maxSpeed - ((weight / self.maxWeight) * (self.maxSpeed - self.minSpeed))
@@ -106,9 +106,10 @@ class Problem(object):
 
             time += distance / speed;
         
-        singleObjective = profit - (self.R * time);
-        objectives = [time, -profit]
-        s = Solution(z, pi, profit, time, singleObjective, objectives)
+#         print("profit is: " + str(profit))
+        singleObjective = p - (self.R * time);
+        objectives = [time, -p]
+        s = Solution(z, pi, p, time, singleObjective, objectives)
         return s
 #         self.pi = pi
 #         self.z = z
@@ -151,7 +152,3 @@ class Problem(object):
         # the profit of each item
         self.profit = [] #double[] 
         
-      
-      
-      
-    """

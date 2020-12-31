@@ -3,7 +3,6 @@ Created on Dec 2, 2020
 
 @author: areid
 '''
-from astropy.extern.bundled.six import reraise
 
 class Solution(object):
     '''
@@ -21,14 +20,14 @@ class Solution(object):
         self.singleObjective = singleObjective
         # list of objectives (floats)
         self.objectives = objectives
+        print("newSolution p=" + str(profit))
 
-
-    def getrelation(self,objectives, other):
+    def getrelation(self, other):
         """    This is used for non-dominated sorting and returns the dominance relation between objectives
          return returns 1 if objective dominates, -1 ifobjective is dominated and 0 if objectives are indifferent
         """
         val = 0
-        for i in range(len(objectives)):
+        for i in range(len(self.objectives)):
             if self.objectives[i] < other.objectives[i]:
                 if val == -1:
                     return 0

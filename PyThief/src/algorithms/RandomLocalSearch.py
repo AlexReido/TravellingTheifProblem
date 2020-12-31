@@ -17,9 +17,9 @@ class RandomLocalSearch(Algorithm):
     '''
     def solve(self, problem):
         counter = 0
-        # TODO implement non dominated set Class
+    
         nds = [] # non-dominated set
-        
+        print("max weight = " + str(problem.maxWeight))
         while True:
             if (self.pi == None):
                 pi = list(range(1, problem.numOfCities))
@@ -31,11 +31,7 @@ class RandomLocalSearch(Algorithm):
                 pi = self.pi
                 
             z = [False]*problem.numOfItems #Packing plan
-            
-            s = problem.evaluate(pi, z)
-            
-            # TODO change to nds class function
-            nds.append(s)
+       
             counter += 1
             rnd = list(range(1, problem.numOfCities-1))
             random.shuffle(rnd)
@@ -44,23 +40,25 @@ class RandomLocalSearch(Algorithm):
             weight = 0.0
             for j in range(len(rnd)):
                 item = rnd[j]
-#                 print("item ", item)
+#                 print(z[item])
+#                 print(counter)
                 if ((weight + problem.weight[item]) < problem.maxWeight ):
+#                     print("item ", item)
                     z[item] = True
+#                     
                     weight += problem.weight[item]
                     
-                    s = problem.evaluate(pi, z)
-                    # TODO change to nds class function 
-                    nds.append(s)
-                    counter += 1
+#                     print(weight)
+#                     print("ndslen:" + str(len(nds)))
                     
                     #TODO add parameter to limit number of trials
-                if (counter >= 20): 
-                    break
+            
+            
+            
+            s = problem.evaluate(pi, z)
+            nds = super().add(s, nds)
 
-    
-
-            if (counter >= 20):#problem.maxNumOfTrials
+            if (counter >= 200):#problem.maxNumOfTrials
                 break
 
         return nds;

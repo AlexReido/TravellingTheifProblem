@@ -5,7 +5,7 @@ Created on Dec 3, 2020
 '''
 from pathlib import Path
 import os
-
+import sys
 class Competition(object):
 
     def __init__(self):
@@ -18,21 +18,21 @@ class Competition(object):
            return Number of solutions to be submitted for the corresponding problem
         """
         name = problem.name;
-        if (name.contains("a280")): 
-            return 100;
-        elif (name.contains("fnl4461")):
-            return 50;
-        elif (name.contains("pla33810")): 
-            return 20;
+        if ("a280" in name): 
+            return 100
+        elif ("fnl4461" in name):
+            return 50
+        elif ("pla33810" in name): 
+            return 20
         else: 
-            return int.__ceil__();
+            return sys.maxsize
     
     
    
     
     
     
-    def writeSolutions(self, outputFolder, teamName="Epsilon", problem, solutions):  
+    def writeSolutions(self, problem, solutions, teamName="Epsilon"):  
         numberofSolutions = self.numberofSolutions(problem)
         if (len(solutions) > numberofSolutions):
             print("WARNING: Finally the competition allows only" + str(numberofSolutions) + 
