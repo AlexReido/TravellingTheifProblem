@@ -3,44 +3,64 @@ Created on Dec 3, 2020
 
 @author: areid
 '''
-def writeSolutions(outputFolder, teamName="Epsilon", problem, solutions):
+from pathlib import Path
+import os
+
+class Competition(object):
+
+    def __init__(self):
+        
+        self.TEAM_NAME = "EPSILON";
+    
+    
+    def numberofSolutions(self, problem):
+        """
+           return Number of solutions to be submitted for the corresponding problem
+        """
+        name = problem.name;
+        if (name.contains("a280")): 
+            return 100;
+        elif (name.contains("fnl4461")):
+            return 50;
+        elif (name.contains("pla33810")): 
+            return 20;
+        else: 
+            return int.__ceil__();
+    
+    
+   
     
     
     
-# public static void writeSolutions(String outputFolder, String teamName, TravelingThiefProblem problem, List<Solution> solutions) throws IOException {
-# 
-#         int numberOfSolutions = Competition.numberOfSolutions(problem);
-#         if (solutions.size() > numberOfSolutions) {
-#             System.out.println(String.format("WARNING: Finally the competition allows only %s solutions to be submitted. " +
-#                     "Your algorithm found %s solutions.", numberOfSolutions, solutions.size()));
-#         }
-# 
-#         BufferedWriter varBw = Files.newBufferedWriter(Paths.get(outputFolder,
-#                 String.format("%s_%s.x", teamName, problem.name)));
-# 
-#         BufferedWriter objBw = Files.newBufferedWriter(Paths.get(outputFolder,
-#                 String.format("%s_%s.f", teamName, problem.name)));
-# 
-# 
-#         for (Solution solution : solutions) {
-# 
-#             // add one to the index of each city to match the index of the input format
-#             List<Integer> modTour = new ArrayList<>(solution.pi);
-#             for (int i = 0; i < modTour.size(); i++) {
-#                 modTour.set(i, modTour.get(i) + 1);
-#             }
-# 
-#             // write the variables
-#             varBw.write(String.join(" ",
-#                     modTour.stream().map(Object::toString).collect(Collectors.toList())) + "\n");
-#             varBw.write(String.join(" ",
-#                     solution.z.stream().map(b -> b ? "1" : "0").collect(Collectors.toList())) + "\n");
-#             varBw.write("\n");
-# 
-#             // write into the objective file
-#             objBw.write(String.format("%.16f %.16f", solution.time, solution.profit) + "\n");
-# 
-#         }
+    def writeSolutions(self, outputFolder, teamName="Epsilon", problem, solutions):  
+        numberofSolutions = self.numberofSolutions(problem)
+        if (len(solutions) > numberofSolutions):
+            print("WARNING: Finally the competition allows only" + str(numberofSolutions) + 
+                  " solutions to be submitted. " +  "\nYour algorithm found " +
+                  str(len(solutions)) + " solutions.")
+            
+            
+        cwd = os.getcwd()
+        newPath = Path(cwd).parent.parent.parent
+        varPath = os.path.join(newPath,"TravellingThief", "results", (teamName + problem.name+".x"))
+        varFile = open(varPath, "w")
+        objPath = os.path.join(newPath,"TravellingThief", "results", (teamName + problem.name+".f"))
+        objFile = open(objPath, "w")
+        
+#         print(newPath)
+        
+        for solution in solutions:
+            modTour = [(c + 1) for c in solution.pi]
+            pi = "".join((str(c)+" ") for c in modTour)
+            varFile.write(pi)
+            z = "".join((str(item)+" ") for item in solution.z)
+            varFile.write(z)
+            varFile.write('\n')
+            
+            #write into objective file
+            objFile.write(("%.2f" % solution.time)+ " " +  ("%.2f" % solution.profit))
+        varFile.close()
+        objFile.close()
 # 
 #         varBw.close();
 #         objBw.close();
