@@ -151,37 +151,7 @@ class Problem(object):
         # the profit of each item
         self.profit = [] #double[] 
         
-        
-
-"""
-     /**
-     * This is used for non-dominated sorting and returns the dominance relation
-     * @param other solution to compare with
-     * @return returns 1 if dominates, -1 if dominated and 0 if indifferent
-     */
-    public int getRelation(Solution other) {
-        int val = 0;
-        for (int i = 0; i < objectives.size(); i++) {
-
-            if (objectives.get(i) < other.objectives.get(i)) {
-                if (val == -1) return 0;
-                val = 1;
-            } elif (objectives.get(i) > other.objectives.get(i)) {
-                if (val == 1) return 0;
-                val = -1;
-            }
-
-        }
-
-        return val;
-
-    }
-
-    /**
-     * @param other solution to compare with
-     * @return True if tour and packing plan is equal
-     */
-    public boolean equalsInDesignSpace(Solution other) {
-        return pi.equals(other.pi) && z.equals(other.z);
-    }
+      
+      
+      
     """
