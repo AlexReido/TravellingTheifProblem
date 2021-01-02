@@ -7,11 +7,8 @@ from algorithms.Algorithm import Algorithm
 import random
 from main.Solution import Solution
 from main.Problem import Problem
-from sympy.core.evalf import rnd
-from astropy.units import count
 from _collections import defaultdict
-import pandas
-
+import sys
 
 class NGTA(Algorithm):
     
@@ -22,13 +19,13 @@ class NGTA(Algorithm):
             Return list of tuple (z, pi)
         """ 
         pop = [] 
-        cities = [i for i in range(1,problem.numOfCities+1)]
+        cities = [i for i in range(1,problem.numOfCities)]
         
         for _ in range(n):
-            z = random.choice([0, 1], size=len(problem.numOfCities)) 
+            z = [random.choices([0, 1],weights= [0.9,0.1]) for i in range(problem.numOfItems)] 
             pi = cities.copy()
             random.shuffle(pi)
-            
+            pi.insert(0, 0)
             individual = (z, pi)      
             pop.append(individual)
                                     
@@ -47,7 +44,7 @@ class NGTA(Algorithm):
         
         for i in range(n-1):
             for j in range(i+1, n):# 1 if dominates
-                print("comparing i" + i + "and j " + j)
+#                 print("comparing i" + str(i) + "and j " + str(j))
                 # if i dominates j 
                 if (initial[i].getrelation(initial[j]) == 1):
                     ranking[j] += 1
@@ -69,8 +66,8 @@ class NGTA(Algorithm):
             use uniform crossover on the packing plan - each item is selected randomly from parent """
         # edge operator 
         
-        tourA = parentA[1]
-        tourB = parentB[1]
+        tourA = parentA.pi
+        tourB = parentB.pi
         cityLen = len(tourA)
         edgeMap = defaultdict(list)
         for c in range(cityLen):
@@ -87,19 +84,23 @@ class NGTA(Algorithm):
             edgeMap[tourB[i+1]].append(c)
             
             
-        currentCity = random.randrange(cityLen)
+        currentCity = 0
         newTour = [currentCity]
+#         print("crossover")
         while(len(edgeMap.keys())>1):
-            
+#             print("currentCity")
             currentCityEdgelist  = edgeMap.pop(currentCity)
             if (currentCityEdgelist == []):
-                next = random.choice(edgeMap.keys())
+                next = random.choice(list(edgeMap.keys()))
             else:    
             # Chooses the city with fewest edges from the current cities neighbours.
             # TODO random on equal  
-                min = int.__ceil__()
+                
+                min = sys.maxsize
                 for city in currentCityEdgelist:
+                    edgeMap[city].remove(currentCity)
     #                 edgeMap[city].remove()
+#                     if (not city in newTour):
                     if (len(edgeMap[city]) < min):
                         min = len(edgeMap[city])
                         next = city
@@ -107,8 +108,8 @@ class NGTA(Algorithm):
             newTour.append(currentCity)
             
         newPackingPlan = []
-        packingPlanA = parentA[0]
-        packingPlanB = parentB[0] 
+        packingPlanA = parentA.z
+        packingPlanB = parentB.z
         itemLen = len(packingPlanA)
         for i in range(itemLen):
             if(random.randrange(1) == 1):
@@ -117,7 +118,9 @@ class NGTA(Algorithm):
                 newPackingPlan.append(packingPlanB[i])
                 
         
-        return (newPackingPlan, newTour)   
+        return (newPackingPlan, newTour)  
+    
+     
     # Yudong 
 #     def mutate(self, preSolution):
 #         """  mutates a solution of tuple(z , pi) 
@@ -125,18 +128,33 @@ class NGTA(Algorithm):
         """  mutates a solution of tuple(z , p) 
         Swap mutation for TSP part two random cities swapped
         Bitflip for packing plan random item"""
-        preSolution.resent_index(drop=True,inplace=True)
-        for x in range (preSolution.__len__()):
+#         mutated = []
+#         for preSolution in newSolutions:
+            # mutate the tour
+#             preSolution.resent_index(drop=True,inplace=True)
+        newTour = preSolution[1]
+#         print(newTour)
+        selectedForSwap = random.choices(newTour[1:], k=2)
+        index0 = newTour.index(selectedForSwap[0])
+        index1 = newTour.index(selectedForSwap[1])
+        newTour[index0] = selectedForSwap[1]
+        newTour[index1] = selectedForSwap[0]
+        # mutate the packing plan
+        newPackingPlan = []
+        for x in range (len(preSolution[0])):
             if(random.random() < chance_of_mutation):
-                preSolution['solutions'][x].mutate()
-        return preSolution
-
+                newPackingPlan.append(preSolution[0][x])
+            else:
+                newPackingPlan.append(random.choice([0, 1]))
+#         mutated.append((newPackingPlan, newTour))
+        return (newPackingPlan, newTour) #mutated
+        
     
-    def evaluate(self, children):
+    def evaluate(self, children, problem):
         """ loop through all children and return list of solutions"""
         solutions = []
         for child in children:
-            solutions.append(Problem.evaluate(self, child.pi, child.z))
+            solutions.append(problem.evaluate(child[1], child[0]))
         return solutions
     
     
@@ -166,32 +184,37 @@ class NGTA(Algorithm):
         self.pi = None  #List<Integer> 
         
     def solve(self, problem):
-        generationLimit = 100
+        generationLimit = 1000
         popSize = 10
         # TODO implement non dominated set Class
         nds = [] # non-dominated first rank 
         
         pCurrent = self.generateInitialPopulation(popSize, problem)
         # returns list of tuple (z, pi)
-        self.evaluate(pCurrent)
-        self.updateArchive(pCurrent)
+        pCurrent = self.evaluate(pCurrent, problem)
+        nds = self.updateArchive(pCurrent, nds)
         
         
         for i in range(generationLimit):
+            print("Generation ", str(i))
             nextPop = [] 
             while (len(nextPop) < len(pCurrent)):
-                parentA = self.selecttour(pCurrent)
-                parentB = self.selecttour(pCurrent)
-                # TODO assert different 
-                assert parentA != parentB, "Parents equal!!"
-                children = self.crossover(parentA, parentB)
-                children = self.mutate(children)
-                while (children in nextPop): # remove clones 
-                    children = self.mutate(children)
+                parentA = self.selectTour(pCurrent)
+                parentB = self.selectTour(pCurrent)
+#                 print("tourlen =", str(len(parentA.pi)))
+#                 TODO assert different 
+#                 assert parentA != parentB, "Parents equal!!"
+                child = self.crossover(parentA, parentB)
+#                 print("after cross tourlen =", str(len(child[1])))
+                child = self.mutate(child, 0.98)
+#                 print("after mutate tourlen =", str(len(child[1])))
+                while (child in nextPop): # remove clones 
+                    child = self.mutate(child)
+                nextPop.append(child)
+                
+            nextPop = self.evaluate(nextPop, problem)
             
-            self.evaluate(children)
-            nextPop = nextPop + children
-            self.updateArchive(children, nds)
+            nds = self.updateArchive(nextPop, nds)
         
             Pcurrent = nextPop
             

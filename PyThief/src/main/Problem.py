@@ -76,6 +76,7 @@ class Problem(object):
         
     def evaluate(self, pi, z):
         if (len(pi) != self.numOfCities or len(z) != self.numOfItems):
+            print(str(len(pi)), " ", str(self.numOfCities), " ",str(len(z))," ", str(self.numOfItems))
             raise RuntimeError("Wrong input for traveling thief evaluation!")
         elif (pi[0] != 0):
             raise RuntimeError("Thief must start at city 0")
@@ -84,12 +85,12 @@ class Problem(object):
         p = 0
         weight = 0
 #         print(z)
+#         print(pi)
         for i in range(self.numOfCities):
             city = pi[i]
             
             for j in self.itemsAtCity[city]:
                 if (z[j] == True) :
-                    
                     weight += self.weight[j]
                     p += self.profit[j]
 #             print(p)
@@ -102,11 +103,12 @@ class Problem(object):
             
             # increase time by considering the speed - do not forget the way from the last city to the first!
             nextCity = pi[((i + 1) % self.numOfCities)]
+            
             distance = math.ceil(self.euclideanDistance(city, nextCity))
-
+#             print(distance)
             time += distance / speed;
         
-#         print("profit is: " + str(profit))
+#         print("profit is: " + str(p))
         singleObjective = p - (self.R * time);
         objectives = [time, -p]
         s = Solution(z, pi, p, time, singleObjective, objectives)

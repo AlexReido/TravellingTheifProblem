@@ -7,6 +7,7 @@ from main.Competition import Competition
 from main.Problem import Problem
 from algorithms.Algorithm import Algorithm
 from algorithms.RandomLocalSearch import RandomLocalSearch
+from algorithms.NGTA import NGTA
 
 if __name__ == "__main__":
     # Problem
@@ -15,7 +16,7 @@ if __name__ == "__main__":
     
     print("number of items: ", p.numOfItems)
     
-    algorithm = RandomLocalSearch()
+    algorithm = NGTA()
     nds = algorithm.solve(p)
     nds = sorted(nds, key=lambda s: s.time)
     

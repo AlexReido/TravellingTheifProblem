@@ -20,7 +20,7 @@ class Solution(object):
         self.singleObjective = singleObjective
         # list of objectives (floats)
         self.objectives = objectives
-        print("newSolution p=" + str(profit))
+#         print("newSolution p=" + str(profit))
 
     def getrelation(self, other):
         """    This is used for non-dominated sorting and returns the dominance relation between objectives
