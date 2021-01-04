@@ -212,7 +212,7 @@ class NGTA(Algorithm):
                 child = self.mutate(child, 0.98)
 #                 print("after mutate tourlen =", str(len(child[1])))
                 while (child in nextPop): # remove clones 
-                    child = self.mutate(child)
+                    child = self.mutate(child, 0.98)
                 nextPop.append(child)
                 
             nextPop = self.evaluate(nextPop, problem)
