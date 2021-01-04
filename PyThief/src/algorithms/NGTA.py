@@ -22,11 +22,13 @@ class NGTA(Algorithm):
         cities = [i for i in range(1,problem.numOfCities)]
         
         for _ in range(n):
-            z = [random.choices([0, 1],weights= [0.9,0.1]) for i in range(problem.numOfItems)] 
+            z = random.choices([False, True], weights=[0.9, 0.1], k=problem.numOfItems)
             pi = cities.copy()
             random.shuffle(pi)
             pi.insert(0, 0)
-            individual = (z, pi)      
+            individual = (z, pi)
+            #print('Initial')
+            #print(z,pi)
             pop.append(individual)
                                     
         return pop
@@ -154,6 +156,7 @@ class NGTA(Algorithm):
         """ loop through all children and return list of solutions"""
         solutions = []
         for child in children:
+            #print(child[0])
             solutions.append(problem.evaluate(child[1], child[0]))
         return solutions
     
