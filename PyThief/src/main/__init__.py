@@ -16,7 +16,7 @@ if __name__ == "__main__":
     
     print("number of items: ", p.numOfItems)
     
-    algorithm = NGTA()
+    algorithm = RandomLocalSearch()
     nds = algorithm.solve(p)
     nds = sorted(nds, key=lambda s: s.time)
     

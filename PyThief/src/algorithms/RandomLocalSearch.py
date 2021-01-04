@@ -21,7 +21,7 @@ class RandomLocalSearch(Algorithm):
         nds = [] # non-dominated set
         print("max weight = " + str(problem.maxWeight))
         while True:
-            if (self.pi == None):
+            if self.pi is None:
                 pi = list(range(1, problem.numOfCities))
 #                 print(pi)
                 random.shuffle(pi)
@@ -33,7 +33,9 @@ class RandomLocalSearch(Algorithm):
             z = [False]*problem.numOfItems #Packing plan
        
             counter += 1
-            rnd = list(range(1, problem.numOfCities-1))
+            s=problem.evaluate(pi,z)
+            nds = super().add(s,nds)
+            rnd = list(range(0, problem.numOfCities-1))
             random.shuffle(rnd)
 #             print(len(rnd))
 #             assert problem.numOfCities == len(rnd)
@@ -42,12 +44,16 @@ class RandomLocalSearch(Algorithm):
                 item = rnd[j]
 #                 print(z[item])
 #                 print(counter)
-                if ((weight + problem.weight[item]) < problem.maxWeight ):
-#                     print("item ", item)
+
+                if weight + problem.weight[item] < problem.maxWeight:
                     z[item] = True
 #                     
                     weight += problem.weight[item]
-                    
+                    s = problem.evaluate(pi, z)
+                    nds = super().add(s, nds)
+
+                    if counter >= 1000:
+                        break
 #                     print(weight)
 #                     print("ndslen:" + str(len(nds)))
                     
@@ -55,16 +61,14 @@ class RandomLocalSearch(Algorithm):
             
             
             
-            s = problem.evaluate(pi, z)
-            nds = super().add(s, nds)
+            #s = problem.evaluate(pi, z)
+            #nds = super().add(s, nds)
 
-            if (counter >= 500):#problem.maxNumOfTrials
+            if counter >= 1000:#problem.maxNumOfTrials
                 break
 
-        return nds;
+        return nds
 
-
-        
     def __init__(self, trials=100):
         '''
         Constructor
