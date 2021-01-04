@@ -36,7 +36,7 @@ class NGTA(Algorithm):
     # Alex
     def selectTour(self, pop):
         """Tournament selection first given number (6) of individuals randomly drawn from population,
-            They are compared to according to thier rank, lowest rank selected, in case of draw 
+            They are compared to according to thief rank, lowest rank selected, in case of draw
             first is selected. Do not use crowding distance.
             Return  
         """
@@ -54,11 +54,14 @@ class NGTA(Algorithm):
                 elif(initial[i].getrelation(initial[j]) == -1):
                     ranking[i] += 1
         
-        min = 20            
+        minx = 20
         for i, rank in enumerate(ranking):
-            if (rank < min):
-                min = rank 
+            if rank < minx:
+                minx = rank
                 index = i
+        #print(initial[index].pi)
+        #print(ranking)
+        #print(ranking.index(min(ranking)))
         return initial[index]
     
     
@@ -143,11 +146,11 @@ class NGTA(Algorithm):
         newTour[index1] = selectedForSwap[0]
         # mutate the packing plan
         newPackingPlan = []
-        for x in range (len(preSolution[0])):
+        for x in range(len(preSolution[0])):
             if(random.random() < chance_of_mutation):
                 newPackingPlan.append(preSolution[0][x])
             else:
-                newPackingPlan.append(random.choice([0, 1]))
+                newPackingPlan.append(random.choice([False, True]))
 #         mutated.append((newPackingPlan, newTour))
         return (newPackingPlan, newTour) #mutated
         
@@ -155,8 +158,9 @@ class NGTA(Algorithm):
     def evaluate(self, children, problem):
         """ loop through all children and return list of solutions"""
         solutions = []
+        #print(children)
         for child in children:
-            #print(child[0])
+            #print(type(child))
             solutions.append(problem.evaluate(child[1], child[0]))
         return solutions
     
@@ -200,26 +204,28 @@ class NGTA(Algorithm):
         
         for i in range(generationLimit):
             print("Generation ", str(i))
-            nextPop = [] 
+            nextPop = []
             while (len(nextPop) < len(pCurrent)):
                 parentA = self.selectTour(pCurrent)
                 parentB = self.selectTour(pCurrent)
 #                 print("tourlen =", str(len(parentA.pi)))
-#                 TODO assert different 
+#                 TODO assert different
+                while parentA == parentB:
+                    parentB = self.selectTour(pCurrent)
+
 #                 assert parentA != parentB, "Parents equal!!"
                 child = self.crossover(parentA, parentB)
 #                 print("after cross tourlen =", str(len(child[1])))
                 child = self.mutate(child, 0.98)
 #                 print("after mutate tourlen =", str(len(child[1])))
-                while (child in nextPop): # remove clones 
-                    child = self.mutate(child)
+                while child in nextPop: # remove clones
+                    child = self.mutate(child, 0.98)
+                child = problem.evaluate(child[1], child[0])
                 nextPop.append(child)
-                
-            nextPop = self.evaluate(nextPop, problem)
-            
-            nds = self.updateArchive(nextPop, nds)
+
+                nds = self.updateArchive(nextPop, nds)
         
-            Pcurrent = nextPop
+            pCurrent = nextPop
             
         return nds
             
