@@ -13,20 +13,17 @@ if __name__ == "__main__":
     # Problem
     p = Problem()
     p.readProblem("a280-n279")
-    
+
     print("number of items: ", p.numOfItems)
-    
-    algorithm = RandomLocalSearch()
+
+    algorithm = NGTA()
     nds = algorithm.solve(p)
-    nds = sorted(nds, key=lambda s: s.time)
-    
-    
-    
+    nds = sorted(nds, key=lambda sr: sr.time)
+
     print(len(nds), " non-dominated solutions found")
     print("here")
     for s in nds:
         print(s.time, " ", s.profit)
-        
+
     comp = Competition()
     comp.writeSolutions(p, nds)
-    

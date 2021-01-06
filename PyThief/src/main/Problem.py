@@ -13,19 +13,18 @@ from cmath import pi
 
 
 class Problem(object):
-    '''
+    """
     classdocs
-    '''
+    """
 
     def readProblem(self, fileName):
         cwd = os.getcwd()
-        #         print("cwd: " + cwd)
         newPath = Path(cwd).parent.parent.parent
         newPath = os.path.join(newPath, "TravellingThief", "src", "main", "resources", (fileName + ".txt"))
-        #         print(newPath)
+
         file = open(newPath, "r")
         line = file.readline()
-        while (line):
+        while line:
             if "self NAME" in line:
                 self.name = line.split(":")[1].strip()
             elif "KNAPSACK DATA TYPE" in line:
@@ -52,8 +51,6 @@ class Problem(object):
                     a = line.split();
                     self.coordinates.append([float(a[1].strip()), float(a[2].strip())])
 
-
-
             elif "ITEMS SECTION" in line:
                 for i in range(self.numOfItems):
                     line = file.readline()
@@ -63,16 +60,14 @@ class Problem(object):
                     self.cityOfItem.append(int(a[3].strip()) - 1)
 
             line = file.readline()
+
         self.itemsAtCity = []
+
         for i in range(self.numOfCities):
             self.itemsAtCity.append([])
+
         for i in range(len(self.cityOfItem)):
             self.itemsAtCity[self.cityOfItem[i]].append(i)
-
-    #         print(self.cityOfItem)
-    #         print(self.itemsAtCity)
-    #         print(self.profit)
-    #         print("len of weights: ", len(self.weight))
 
     def evaluate(self, pi, z):
         if len(pi) != self.numOfCities or len(z) != self.numOfItems:
@@ -84,8 +79,7 @@ class Problem(object):
         time = 0
         p = 0
         weight = 0
-        #         print(z)
-        #         print(pi)
+
         for i in range(self.numOfCities):
             city = pi[i]
 
@@ -93,7 +87,7 @@ class Problem(object):
                 if z[j]:
                     weight += self.weight[j]
                     p += self.profit[j]
-            #             print(p)
+
             if weight > self.maxWeight:
                 time = sys.float_info.max
                 p = -sys.float_info.max
@@ -103,21 +97,13 @@ class Problem(object):
 
             # increase time by considering the speed - do not forget the way from the last city to the first!
             nextCity = pi[(i + 1) % self.numOfCities]
-
             distance = math.ceil(self.euclideanDistance(city, nextCity))
-            #             print(distance)
             time += distance / speed
-            #print(time)
 
-        #         print("profit is: " + str(p))
         singleObjective = p - (self.R * time)
         objectives = [time, -p]
         s = Solution(z, pi, p, time, singleObjective, objectives)
         return s
-
-    #         self.pi = pi
-    #         self.z = z
-    #
 
     def euclideanDistance(self, cityA, cityB):
         xdist = self.coordinates[cityA][0] - self.coordinates[cityB][0]
@@ -125,9 +111,9 @@ class Problem(object):
         return math.sqrt((xdist ** 2) + (ydist ** 2))
 
     def __init__(self):
-        '''
+        """
         Constructor
-        '''
+        """
         self.name = ""
         self.numOfCities = -1
         self.numOfItems = -1
@@ -155,3 +141,5 @@ class Problem(object):
 
         # the profit of each item
         self.profit = []  # double[]
+
+        self.itemsAtCity = []
