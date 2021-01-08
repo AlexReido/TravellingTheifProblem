@@ -10,7 +10,7 @@ class Algorithm(object):
 
     def add(self, solution, nds):
         """
-         Add a solution to the non-dominated set
+        Add a solution to the non-dominated set
         @param s The solution to be added.
         @param  nds: 
         @return The non dominated solutions
