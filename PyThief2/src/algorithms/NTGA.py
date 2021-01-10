@@ -32,7 +32,7 @@ class NTGA(object):
             order_city = self.problem.cities[1:]
             random.shuffle(order_city)
             order_city.insert(0, self.problem.cities[0])
-            pick_items = random.choices([False, True], weights=[0.9, 0.1], k=self.problem.number_of_cities)
+            pick_items = random.choices([False, True], weights=[0.9, 0.1], k=self.problem.number_of_items)
             self.population.append(Chromosome(order_city, pick_items))
 
     def selection(self) -> [Chromosome]:

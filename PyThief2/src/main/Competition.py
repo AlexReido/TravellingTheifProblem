@@ -8,22 +8,20 @@ __author__ = 'Manish Dawash'
 __date__ = '07 Jan 2021'
 __version__ = '1.1.0'
 
-import configparser
 import os
 import sys
 from pathlib import Path
 
 from Problem import Problem
 from Solution import Solution
+from helpers.config import config
 
 
 class Competition(object):
     def __init__(self):
-        config = configparser.ConfigParser()
-        config.read('../../pythief.ini')
         self.team_name = config.get('team_config', 'team_name')
         self.instances = config.get('instance_config', 'instances').replace(' ', '').split(',')
-        self.num_dict = {s.split(':')[0]: s.split(':')[1] for s in
+        self.num_dict = {s.split(':')[0]: int(s.split(':')[1]) for s in
                          config.get('instance_config', 'number_of_solutions').replace(' ', '').split(',')}
 
     def number_of_solutions(self, problem: Problem) -> int:
@@ -41,8 +39,8 @@ class Competition(object):
                   str(len(solutions)) + " solutions.")
 
         cwd = os.getcwd()
-        var_path = os.path.join(Path(cwd).parent.parent, output_folder, (self.team_name + '_' + problem.name + '.x'))
-        obj_path = os.path.join(Path(cwd).parent.parent, output_folder, (self.team_name + '_' + problem.name + '.f'))
+        var_path = os.path.join(Path(cwd).parent.parent, output_folder, (self.team_name + '_' + problem.file_name + '.x'))
+        obj_path = os.path.join(Path(cwd).parent.parent, output_folder, (self.team_name + '_' + problem.file_name + '.f'))
 
         var_file = open(var_path, 'w')
         obj_file = open(obj_path, 'w')
@@ -60,7 +58,7 @@ class Competition(object):
         obj_file.close()
 
     def print_solutions(self, problem: Problem, solutions: [Solution], print_variables: bool = False) -> None:
-        print(f'Problem: {problem.name} \t Team: {self.team_name}')
+        print(f'Problem: {problem.file_name} \t Team: {self.team_name}')
         print(f'Number of non-dominated solutions: {len(solutions)}')
 
         for solution in solutions:
