@@ -45,6 +45,20 @@ class Mutation:
             if random.random() < rate:
                 parent.pick_items[x] = random.choice([False, True])
 
+    @staticmethod
+    def swap_mutation(self, parent: Chromosome, rate: float) -> None:
+        selected_for_swap = random.choices(parent.order_city[1:], k=2)
+
+        index0 = parent.order_city.index(selected_for_swap[0])
+        index1 = parent.order_city.index(selected_for_swap[1])
+
+        parent.order_city[index0] = selected_for_swap[1]
+        parent.order_city[index1] = selected_for_swap[0]
+
+        for x in range(len(parent.pick_items)):
+            if random.random() < rate:
+                parent.pick_items[x] = random.choice([False, True])
+
 
 def mutation(parents: [Chromosome]) -> [Chromosome]:
     parent_a, parent_b = parents
