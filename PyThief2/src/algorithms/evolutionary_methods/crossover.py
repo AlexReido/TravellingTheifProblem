@@ -120,6 +120,10 @@ class Crossover(object):
 
 def crossover(parents: [Chromosome]) -> (Chromosome, Chromosome):
     parent_a, parent_b = parents
+
+    if random.random() > float(config.get('run_config', 'crossover_rate')):
+        return parents
+
     child_a, child_b = getattr(Crossover, config.get('algorithm_config', 'crossover').lower().strip())(Crossover(),
                                                                                                        parent_a,
                                                                                                        parent_b)

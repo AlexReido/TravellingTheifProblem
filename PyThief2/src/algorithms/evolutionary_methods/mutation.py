@@ -36,7 +36,7 @@ class Mutation:
     def partial_shuffle_mutation(self, parent: Chromosome, rate: float) -> None:
         for i in range(1, len(parent.order_city)):
             if random.random() < rate:
-                j = random.randint(1, len(parent.order_city)-1)
+                j = random.randint(1, len(parent.order_city) - 1)
                 city_i = parent.order_city[i]
                 parent.order_city[i] = parent.order_city[j]
                 parent.order_city[j] = city_i
@@ -48,9 +48,14 @@ class Mutation:
 
 def mutation(parents: [Chromosome]) -> [Chromosome]:
     parent_a, parent_b = parents
-    getattr(Mutation, config.get('algorithm_config', 'mutation').lower().strip())(Mutation(), parent_a, float(
-        config.get('run_config', 'mutation_rate')))
-    getattr(Mutation, config.get('algorithm_config', 'mutation').lower().strip())(Mutation(), parent_b, float(
-        config.get('run_config', 'mutation_rate')))
+    mutation_rate = float(config.get('run_config', 'mutation_rate'))
+    getattr(Mutation, config.get('algorithm_config', 'mutation').lower().strip())(Mutation(), parent_a, mutation_rate)
+    getattr(Mutation, config.get('algorithm_config', 'mutation').lower().strip())(Mutation(), parent_b, mutation_rate)
 
     return parents
+
+
+def mutate(parent: Chromosome) -> Chromosome:
+    mutation_rate = float(config.get('run_config', 'mutation_rate'))
+    getattr(Mutation, config.get('algorithm_config', 'mutation').lower().strip())(Mutation(), parent, mutation_rate)
+    return parent

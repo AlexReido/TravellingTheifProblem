@@ -17,6 +17,7 @@ from Problem import Problem
 from Solution import Solution
 from helpers.Chromosome import Chromosome
 from mutation import mutation
+from mutation import mutate
 
 
 class NTGA(object):
@@ -79,8 +80,12 @@ class NTGA(object):
                 children = mutation(crossover(parents))
 
                 for child in children:
+                    count = 0
                     while (child in new_population) or children[0] == children[1]:
-                        child.mutate()
+                        count += 1
+                        mutate(child)
+                        if count > 100:
+                            break
 
                 new_population += children
 
