@@ -58,7 +58,7 @@ class Crossover(object):
 
         edge_map = defaultdict(list)
 
-        for c in range(len(cities_a)):
+        for c in cities_a:
             edge_map.setdefault(c, [])
 
         edge_map[cities_a[0]].append(cities_a[-1])
@@ -105,7 +105,7 @@ class Crossover(object):
                 new_items.append(items_a[i])
             else:
                 new_items.append(items_b[i])
-
+        # print(new_cities)
         return Chromosome(new_cities, new_items)
 
     def edge_crossover(self, parent_a: Chromosome, parent_b: Chromosome) -> (Chromosome, Chromosome):

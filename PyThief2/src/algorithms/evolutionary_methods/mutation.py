@@ -26,7 +26,7 @@ class Mutation:
         pick_items = parent.pick_items[:i] + parent.pick_items[i:j][::-1] + parent.pick_items[j:]
 
         for x in range(len(pick_items)):
-            if random.random() < rate:
+            if random.random() > rate:
                 pick_items[x] = random.choice([False, True])
 
         parent.order_city = order_city

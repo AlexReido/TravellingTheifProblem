@@ -70,8 +70,9 @@ class NTGA(object):
         self.generate_initial_population()
 
         new_population = []
-
+        print("Generation limit:", str(generation_limit))
         for i in range(generation_limit):
+            print("generation: ", i)
             self.population = self.evaluate(self.population)
             self.non_dominated_set.adds(self.population)
 
@@ -90,5 +91,6 @@ class NTGA(object):
                 new_population += children
 
             self.population = new_population
+            new_population = []
 
         return self.non_dominated_set
