@@ -22,7 +22,7 @@ if __name__ == "__main__":
     random.seed(random_seed)
 
     competition = Competition()#"a280-n279",
-    problem_names = ["fnl4461-n4460", "fnl4461-n22300", "fnl4461-n44600", "pla33810-n33809", "pla33810-n169045", "pla33810-n338090"]
+    problem_names = ["a280-n279"]#["fnl4461-n4460", "fnl4461-n22300", "fnl4461-n44600", "pla33810-n33809", "pla33810-n169045", "pla33810-n338090"]
     for instance in competition.instances:
         for problemName in problem_names:
             problem = Problem(problem_folder, problemName)
