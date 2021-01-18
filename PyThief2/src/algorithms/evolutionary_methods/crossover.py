@@ -20,6 +20,9 @@ class Crossover(object):
 
     @staticmethod
     def ordered_crossover(self, parent_a: Chromosome, parent_b: Chromosome) -> (Chromosome, Chromosome):
+        """
+            This method implements the ordered crossover algorithm
+        """
         seq = random.sample(range(0, len(parent_a.order_city) - 1), k=2)
         seq.sort()
         i, j = seq
@@ -53,6 +56,9 @@ class Crossover(object):
 
     @staticmethod
     def edge_crossover_single(parent_a: Chromosome, parent_b: Chromosome) -> Chromosome:
+        """
+            This method implements the edge crossover algorithm
+        """
         cities_a = parent_a.order_city
         cities_b = parent_b.order_city
 
@@ -109,6 +115,9 @@ class Crossover(object):
         return Chromosome(new_cities, new_items)
 
     def edge_crossover(self, parent_a: Chromosome, parent_b: Chromosome) -> (Chromosome, Chromosome):
+        """
+            This method returns two children using edge crossover algorithm
+        """
         child_a = self.edge_crossover_single(parent_a, parent_b)
         child_b = self.edge_crossover_single(parent_a, parent_b)
 
@@ -119,6 +128,9 @@ class Crossover(object):
 
 
 def crossover(parents: [Chromosome]) -> (Chromosome, Chromosome):
+    """
+        This function calls the required crossover method based on .ini file
+    """
     parent_a, parent_b = parents
 
     if random.random() > float(config.get('run_config', 'crossover_rate')):

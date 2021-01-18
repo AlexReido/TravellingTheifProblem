@@ -1,9 +1,4 @@
 #!/usr/bin/env python
-
-"""
-NTGA.py
-"""
-
 __author__ = 'Manish Dawash'
 __date__ = '07 Jan 2021'
 __version__ = '1.1.0'
@@ -21,6 +16,9 @@ from mutation import mutate
 
 
 class NTGA(object):
+    """
+        This class implements NTGA algorithm
+    """
     def __init__(self, problem: Problem) -> None:
         self.xyz = 1
         self.problem = problem
@@ -29,6 +27,9 @@ class NTGA(object):
         self.population = []
 
     def generate_initial_population(self) -> None:
+        """
+            This method is used to generate initial population
+        """
         for _ in range(self.population_size):
             order_city = self.problem.cities[1:]
             random.shuffle(order_city)
@@ -37,6 +38,9 @@ class NTGA(object):
             self.population.append(Chromosome(order_city, pick_items))
 
     def selection(self) -> [Chromosome]:
+        """
+            This method selects two parents for crossover
+        """
         parent_a = self.tournament_selection()
         parent_b = self.tournament_selection()
 
@@ -46,6 +50,9 @@ class NTGA(object):
         return [parent_a, parent_b]
 
     def tournament_selection(self) -> Chromosome:
+        """
+            This method select a parent using tournament selecting algorithm
+        """
         n = 6
         initial = random.sample(self.population, k=n)
         ranking = [1] * n
@@ -63,9 +70,15 @@ class NTGA(object):
         return initial[random.choice([i for i, x in enumerate(ranking) if i == min_rank])].chromosome
 
     def evaluate(self, children: [Chromosome]) -> [Solution]:
+        """
+            This method is used to evaluate new population
+        """
         return [self.problem.evaluate(chromosome) for chromosome in children]
 
     def solve(self):
+        """
+            This method solves the problem using NTGA algorithm
+        """
         generation_limit = int(config.get('run_config', 'generation_limit'))
         self.generate_initial_population()
 

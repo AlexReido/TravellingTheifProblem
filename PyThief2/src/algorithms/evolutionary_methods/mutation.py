@@ -1,9 +1,4 @@
 #!/usr/bin/env python
-
-"""
-mutation.py
-"""
-
 __author__ = 'Manish Dawash'
 __date__ = '08 Jan 2021'
 __version__ = '1.1.0'
@@ -18,6 +13,9 @@ class Mutation:
 
     @staticmethod
     def reverse_sequence_mutation(self, parent: Chromosome, rate: float) -> None:
+        """
+            This method implements reverse sequence mutation algorithm
+        """
         seq = random.sample(range(1, len(parent.order_city)), k=2)
         seq.sort()
         i, j = seq
@@ -34,6 +32,9 @@ class Mutation:
 
     @staticmethod
     def partial_shuffle_mutation(self, parent: Chromosome, rate: float) -> None:
+        """
+            This method implements the partial shuffle mutation algorithm
+        """
         for i in range(1, len(parent.order_city)):
             if random.random() < rate:
                 j = random.randint(1, len(parent.order_city) - 1)
@@ -47,6 +48,9 @@ class Mutation:
 
     @staticmethod
     def swap_mutation(self, parent: Chromosome, rate: float) -> None:
+        """
+            This method implements the swap mutation algorithm
+        """
         selected_for_swap = random.choices(parent.order_city[1:], k=2)
 
         index0 = parent.order_city.index(selected_for_swap[0])
@@ -61,6 +65,9 @@ class Mutation:
 
 
 def mutation(parents: [Chromosome]) -> [Chromosome]:
+    """
+        Gets a list of parents and mutates the children according to mutation method in .ini file
+    """
     parent_a, parent_b = parents
     mutation_rate = float(config.get('run_config', 'mutation_rate'))
     getattr(Mutation, config.get('algorithm_config', 'mutation').lower().strip())(Mutation(), parent_a, mutation_rate)
@@ -70,6 +77,9 @@ def mutation(parents: [Chromosome]) -> [Chromosome]:
 
 
 def mutate(parent: Chromosome) -> Chromosome:
+    """
+        Takes a child and mutates it according to mutation method in .ini file
+    """
     mutation_rate = float(config.get('run_config', 'mutation_rate'))
     getattr(Mutation, config.get('algorithm_config', 'mutation').lower().strip())(Mutation(), parent, mutation_rate)
     return parent

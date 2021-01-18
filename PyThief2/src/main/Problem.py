@@ -1,9 +1,4 @@
 #!/usr/bin/env python
-
-"""
-Problem.py
-"""
-
 __author__ = 'Manish Dawash'
 __date__ = '07 Jan 2021'
 __version__ = '1.1.0'
@@ -35,6 +30,9 @@ dict_var = {
 
 
 class Problem(object):
+    """
+        This class is used to represent a problem that needs to be solved
+    """
     def __init__(self, folder_name: str, file_name: str) -> None:
         self.file_name = file_name
         self.folder_name = folder_name
@@ -50,6 +48,9 @@ class Problem(object):
         self.read_problem()
 
     def read_problem(self):
+        """
+            This method is used to read the problem from file
+        """
         cwd = os.getcwd()
         file_path = os.path.join(Path(cwd).parent.parent, self.folder_name, (self.file_name + '.txt'))
 
@@ -74,6 +75,9 @@ class Problem(object):
                                 break
 
     def evaluate(self, chromosome: Chromosome) -> Solution:
+        """
+            This method is used to evaluate a chromosome and return a solution after calculating time and profit
+        """
         if chromosome.order_city[0].idx != 1:
             raise RuntimeError('Thief must start at city id 1')
 
@@ -103,10 +107,16 @@ class Problem(object):
 
 
 def euclidean_distance(city_a: City, city_b: City) -> float:
+    """
+        This function is used to calculate the euclidean distance
+    """
     return math.sqrt((city_a.x - city_b.x) ** 2 + (city_a.y - city_b.y) ** 2)
 
 
 def convert_type(num: str) -> Union[int, float, str]:
+    """
+        This function is used to convert string to int or float depending on the value
+    """
     try:
         int(num)
         return int(num)

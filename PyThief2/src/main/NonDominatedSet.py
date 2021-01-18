@@ -1,9 +1,4 @@
 #!/usr/bin/env python
-
-"""
-NonDominatedSet.py
-"""
-
 __author__ = 'Manish Dawash'
 __date__ = '07 Jan 2021'
 __version__ = '1.1.0'
@@ -12,10 +7,16 @@ from Solution import Solution
 
 
 class NonDominatedSet(object):
+    """
+        This class is used to represent the non dominated solutions
+    """
     def __init__(self):
         self.entries = []
 
     def add(self, solution: Solution) -> bool:
+        """
+            This method is used to add a solution to non dominated set
+        """
         is_added = True
 
         for entry in self.entries:
@@ -33,5 +34,8 @@ class NonDominatedSet(object):
         return is_added
 
     def adds(self, solutions: [Solution]) -> None:
+        """
+            This method is used to add a list of solutions to non dominated set
+        """
         for solution in solutions:
             self.add(solution)

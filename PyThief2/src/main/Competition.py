@@ -1,9 +1,4 @@
 #!/usr/bin/env python
-
-"""
-Competition.py
-"""
-
 __author__ = 'Manish Dawash'
 __date__ = '07 Jan 2021'
 __version__ = '1.1.0'
@@ -18,6 +13,9 @@ from helpers.config import config
 
 
 class Competition(object):
+    """
+        This class represents the competition and have utility methods to write and print solutions
+    """
     def __init__(self):
         self.team_name = config.get('team_config', 'team_name')
         self.instances = config.get('instance_config', 'instances').replace(' ', '').split(',')
@@ -25,12 +23,18 @@ class Competition(object):
                          config.get('instance_config', 'number_of_solutions').replace(' ', '').split(',')}
 
     def number_of_solutions(self, problem: Problem) -> int:
+        """
+            This method is used to return the maximum number of solutions allowed for a specific problem
+        """
         if problem.name.split('-')[0].strip() in self.num_dict:
             return self.num_dict[problem.name.split('-')[0].strip()]
         else:
             return sys.maxsize
 
     def write_solutions(self, output_folder: str, problem: Problem, solutions: [Solution]) -> None:
+        """
+            This method is used to write solutions to a file
+        """
         number_of_solutions = self.number_of_solutions(problem)
 
         if len(solutions) > number_of_solutions:
@@ -58,6 +62,9 @@ class Competition(object):
         obj_file.close()
 
     def print_solutions(self, problem: Problem, solutions: [Solution], print_variables: bool = False) -> None:
+        """
+            This method is used to print solutions to the console
+        """
         print(f'Problem: {problem.file_name} \t Team: {self.team_name}')
         print(f'Number of non-dominated solutions: {len(solutions)}')
 
