@@ -26,7 +26,7 @@ Please run the jupyter notebook at:
 This will read in the results and show:
 	The pareto fronts of all combinations of genetic operators (both mutation and crossover)
 
-	The results of the specialized NGTA approach with all competition problems, with analysis in cell below.
+	The results of the specialized NTGA approach with all competition problems, with analysis in cell below.
 
 	A table showing the hypervolume of the combinations of genetic operators with analysis.
 
